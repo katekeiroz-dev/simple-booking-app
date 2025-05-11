@@ -72,6 +72,8 @@ func main() {
 				break
 			}
 
+		} else if userTickets == remainingTickets {
+			//do something else
 		} else {
 			fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets \n", remainingTickets, userTickets)
 
