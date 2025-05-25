@@ -39,9 +39,13 @@ func main() {
 		fmt.Println("Enter number of tickts: ")
 		fmt.Scan(&userTickets)
 
+		isValidName := len(firstName) >= 2 && len(lastName) >= 2
+		isValidEmail := strings.Contains(email, "@")
+		isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
+
 		//to handle the case of the user input more the the number of tickets available
 		//invalid input from the users
-		if userTickets <= remainingTickets {
+		if isValidName && isValidEmail && isValidTicketNumber {
 			//Subtracts the number of tickets booked from the remaining tickets.
 			remainingTickets = remainingTickets - userTickets
 
@@ -69,13 +73,11 @@ func main() {
 			if remainingTickets == 0 {
 				//end program
 				fmt.Println("Our conference is sold out.")
-				break
+				break //break the loop
 			}
 
-		} else if userTickets == remainingTickets {
-			//do something else
 		} else {
-			fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets \n", remainingTickets, userTickets)
+			fmt.Printf("your input data is invalid, please try again !\n")
 
 		}
 
