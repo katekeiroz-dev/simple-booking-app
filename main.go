@@ -2,6 +2,7 @@ package main
 
 //Imports the fmt package, which provides functions for formatted I/O (e.g., printing to the console).
 import (
+	"booking-app/helper"
 	"fmt"
 	"strings"
 )
@@ -22,12 +23,12 @@ func main() {
 	for {
 
 		firstName, lastName, email, userTickets := getUserInput()
-		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
 		//to handle the case of the user input more the the number of tickets available
 		//invalid input from the users
 		if isValidName && isValidEmail && isValidTicketNumber {
-			bookTicket(userTickets, firstName, lastName, confName)
+			bookTicket(userTickets, firstName, lastName, confName, email)
 
 			firstNames := getFirstNames()                                   // using a fuction that return a value
 			fmt.Printf("The first name of bookings are : %v\n", firstNames) //using the valeu firstNames that
@@ -78,17 +79,6 @@ func getFirstNames() []string {
 
 }
 
-func validateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
-
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
-
-	//unlike other languages in go we can returns multiple values in a fuction
-	return isValidName, isValidEmail, isValidTicketNumber
-
-}
-
 func getUserInput() (string, string, string, uint) {
 	var firstName string
 	var lastName string
@@ -112,7 +102,7 @@ func getUserInput() (string, string, string, uint) {
 
 }
 
-func bookTicket(userTickets uint, firstName string, lastName string, confName string) {
+func bookTicket(userTickets uint, firstName string, lastName string, confName string, email string) {
 	//Subtracts the number of tickets booked from the remaining tickets.
 	remainingTickets = remainingTickets - userTickets
 
