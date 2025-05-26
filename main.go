@@ -6,35 +6,30 @@ import (
 	"strings"
 )
 
+const confTickets = 50
+
+var confName = "Go Conference"
+var remainingTickets uint = 50 //This tracks how many tickets are left.
+var bookings []string
+
 // Declares the main function, where the execution of the program begins.
 func main() {
-	var confName = "Go Conference"
-	const confTickets = 50
-	var remainingTickets uint = 50 //This tracks how many tickets are left.
-	var bookings []string
 
-	greetUsers(confName, confTickets, remainingTickets)
+	greetUsers()
 
 	//loop to keep asking for user input, and then store the value at the bookings slice
 	//Starts an infinite loop so the program keeps asking for user input continuously.
 	for {
 
 		firstName, lastName, email, userTickets := getUserInput()
-		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTickets)
 
 		//to handle the case of the user input more the the number of tickets available
 		//invalid input from the users
 		if isValidName && isValidEmail && isValidTicketNumber {
-			//Subtracts the number of tickets booked from the remaining tickets.
-			remainingTickets = remainingTickets - userTickets
+			bookTicket(userTickets, firstName, lastName, confName)
 
-			//store the value at the bookings slice
-			bookings = append(bookings, firstName+" "+lastName)
-
-			fmt.Printf("Thank you %v %v , for booking %v tickets \n. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-			fmt.Printf(" %v tickets remaing for %v \n", remainingTickets, confName)
-
-			firstNames := getFirstNames(bookings)                           // using a fuction that return a value
+			firstNames := getFirstNames()                                   // using a fuction that return a value
 			fmt.Printf("The first name of bookings are : %v\n", firstNames) //using the valeu firstNames that
 			//return from the function and assing into a varible call firstNames that get the function getFirstNames
 			//break the loop
@@ -61,13 +56,13 @@ func main() {
 	}
 }
 
-func greetUsers(confName string, confTickets int, remainingTickets uint) {
+func greetUsers() {
 	fmt.Printf("Welcome to our %v booking application \n", confName)
 	fmt.Printf("We have a total of %v tickets and %v are still availabe \n", confTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend ")
 }
 
-func getFirstNames(bookings []string) []string {
+func getFirstNames() []string {
 	firstNames := []string{} //Initializes an empty slice of strings called firstNames.This will store the first names extracted from each booking.
 
 	//This is a for loop that iterates over the bookings slice.booking represents each item (a full name string like "John Doe").The underscore _ is a blank identifier used to ignore the index (which is normally the first value returned by range).In Go, if you don’t plan to use a value, you must explicitly ignore it with _.
@@ -83,7 +78,7 @@ func getFirstNames(bookings []string) []string {
 
 }
 
-func validateUserInput(firstName string, lastName string, email string, userTickets uint, remainingTickets uint) (bool, bool, bool) {
+func validateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
 
 	isValidName := len(firstName) >= 2 && len(lastName) >= 2
 	isValidEmail := strings.Contains(email, "@")
@@ -115,4 +110,15 @@ func getUserInput() (string, string, string, uint) {
 
 	return firstName, lastName, email, userTickets
 
+}
+
+func bookTicket(userTickets uint, firstName string, lastName string, confName string) {
+	//Subtracts the number of tickets booked from the remaining tickets.
+	remainingTickets = remainingTickets - userTickets
+
+	//store the value at the bookings slice
+	bookings = append(bookings, firstName+" "+lastName)
+
+	fmt.Printf("Thank you %v %v , for booking %v tickets \n. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+	fmt.Printf(" %v tickets remaing for %v \n", remainingTickets, confName)
 }
