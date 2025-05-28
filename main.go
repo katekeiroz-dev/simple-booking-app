@@ -4,14 +4,14 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 const confTickets = 50
 
 var confName = "Go Conference"
 var remainingTickets uint = 50 //This tracks how many tickets are left.
-var bookings []string
+var bookings = make([]map[string]string, 0)
 
 // Declares the main function, where the execution of the program begins.
 func main() {
@@ -70,9 +70,8 @@ func getFirstNames() []string {
 
 	for _, booking := range bookings { // a blank indentifier "_" ignore a variable you don't want to use
 		//so whth Go you need to male unused variables explicit
-		var names = strings.Fields(booking) //splits the string
 
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"])
 	}
 
 	return firstNames
@@ -106,8 +105,17 @@ func bookTicket(userTickets uint, firstName string, lastName string, confName st
 	//Subtracts the number of tickets booked from the remaining tickets.
 	remainingTickets = remainingTickets - userTickets
 
+	//create a map for the users
+	var userData = make(map[string]string)
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	//now convert uint into string to use in the map
+	userData["userTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
 	//store the value at the bookings slice
-	bookings = append(bookings, firstName+" "+lastName)
+	bookings = append(bookings, userData)
+	fmt.Printf("List of bookings : %v\n ", bookings)
 
 	fmt.Printf("Thank you %v %v , for booking %v tickets \n. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 	fmt.Printf(" %v tickets remaing for %v \n", remainingTickets, confName)
