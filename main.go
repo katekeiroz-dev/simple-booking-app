@@ -4,14 +4,21 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
-	"strconv"
 )
 
 const confTickets = 50
 
 var confName = "Go Conference"
 var remainingTickets uint = 50 //This tracks how many tickets are left.
-var bookings = make([]map[string]string, 0)
+var bookings = make([]UserData, 0)
+
+// struct can be compare to class in java
+type UserData struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTicktes uint
+}
 
 // Declares the main function, where the execution of the program begins.
 func main() {
@@ -106,12 +113,12 @@ func bookTicket(userTickets uint, firstName string, lastName string, confName st
 	remainingTickets = remainingTickets - userTickets
 
 	//create a map for the users
-	var userData = make(map[string]string)
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	//now convert uint into string to use in the map
-	userData["userTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+	var userData = UserData{
+		firstName:       firstName,
+		lastName:        lastName,
+		email:           email,
+		numberOfTicktes: userTickets,
+	}
 
 	//store the value at the bookings slice
 	bookings = append(bookings, userData)
