@@ -78,7 +78,7 @@ func getFirstNames() []string {
 	for _, booking := range bookings { // a blank indentifier "_" ignore a variable you don't want to use
 		//so whth Go you need to male unused variables explicit
 
-		firstNames = append(firstNames, booking["firstName"])
+		firstNames = append(firstNames, booking.firstName)
 	}
 
 	return firstNames
